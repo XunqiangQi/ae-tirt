@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ae-tirt"
+version = "0.1.0"
+description = "Research-oriented toolkit for Autoencoder Thurstonian IRT modeling"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+  "numpy",
+  "pandas",
+  "scipy",
+  "torch",
+]
+keywords = ["psychometrics", "irt", "thurstonian", "forced-choice", "autoencoder"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Scientific/Engineering",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+docs = ["sphinx"]
+
+[project.scripts]
+ae-tirt-run-all = "ae_tirt.cli:run_all_experiments"
