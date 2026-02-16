@@ -4,13 +4,14 @@ from __future__ import annotations
 
 from pathlib import Path
 
+_MAX_ANCESTORS = 8
+_PROJECT_INDICATORS = ("pyproject.toml", "ae_tirt", "model.py", "sim_data.py")
+
 
 def get_project_root() -> str:
-    current_path = Path(__file__).parent if "__file__" in globals() else Path.cwd()
-    project_indicators = ["pyproject.toml", "ae_tirt", "model.py", "sim_data.py"]
-
-    for _ in range(8):
-        for indicator in project_indicators:
+    current_path = Path(__file__).resolve().parent
+    for _ in range(_MAX_ANCESTORS):
+        for indicator in _PROJECT_INDICATORS:
             if (current_path / indicator).exists():
                 return str(current_path)
         parent = current_path.parent
@@ -20,11 +21,11 @@ def get_project_root() -> str:
     return str(Path.cwd())
 
 
-def get_safe_path(*path_parts, base_dir=None):
+def get_safe_path(*path_parts: str | Path, base_dir: str | Path | None = None) -> str:
     base = get_project_root() if base_dir is None else base_dir
     return str(Path(base).joinpath(*path_parts))
 
 
-def ensure_dir(path):
+def ensure_dir(path: str | Path) -> str | Path:
     Path(path).mkdir(parents=True, exist_ok=True)
     return path

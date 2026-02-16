@@ -1,19 +1,29 @@
 """Correlation matrix helpers."""
 
+from __future__ import annotations
+
 import numpy as np
 
 
-def is_positive_definite(mat):
-    mat = np.asarray(mat)
-    return bool(np.all(np.linalg.eigvalsh(mat) > 0))
+def is_positive_definite(mat: np.ndarray | list, tol: float = 1e-10) -> bool:
+    """Check if matrix is positive definite (eigenvalues > tol)."""
+    mat = np.asarray(mat, dtype=float)
+    return bool(np.all(np.linalg.eigvalsh(mat) > tol))
 
 
 def sample_random_correlation_matrix(
-    ntraits: int, low: float = -0.5, high: float = 0.5, max_tries: int = 50, epsilon: float = 1e-3
+    ntraits: int,
+    low: float = -0.5,
+    high: float = 0.5,
+    max_tries: int = 50,
+    epsilon: float = 1e-3,
+    rng: np.random.Generator | None = None,
 ) -> np.ndarray:
     """Sample a valid positive-definite correlation matrix."""
+    if rng is None:
+        rng = np.random.default_rng()
     for _ in range(max_tries):
-        mat = np.random.uniform(low, high, size=(ntraits, ntraits))
+        mat = rng.uniform(low, high, size=(ntraits, ntraits))
         mat = (mat + mat.T) / 2
         np.fill_diagonal(mat, 1.0)
 

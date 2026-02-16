@@ -6,11 +6,11 @@ import numpy as np
 
 try:
     import torch
-except Exception:  # pragma: no cover
+except ImportError:  # pragma: no cover
     torch = None
 
 
-def set_seed(seed: int):
+def set_seed(seed: int) -> None:
     random.seed(seed)
     np.random.seed(seed)
     if torch is not None:

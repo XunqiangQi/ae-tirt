@@ -2,36 +2,11 @@
 
 from __future__ import annotations
 
-from pathlib import Path
-
 import numpy as np
 import pandas as pd
 from scipy.stats import multivariate_normal, norm
 
-
-def get_project_root() -> str:
-    current_path = Path(__file__).parent if "__file__" in globals() else Path.cwd()
-    project_indicators = ["pyproject.toml", "ae_tirt", "model.py", "sim_data.py"]
-    for _ in range(6):
-        for indicator in project_indicators:
-            if (current_path / indicator).exists():
-                return str(current_path)
-        parent = current_path.parent
-        if parent == current_path:
-            break
-        current_path = parent
-    return str(Path.cwd())
-
-
-def get_safe_path(*path_parts, base_dir=None):
-    if base_dir is None:
-        base_dir = get_project_root()
-    return str(Path(base_dir).joinpath(*path_parts))
-
-
-def ensure_dir(path):
-    Path(path).mkdir(parents=True, exist_ok=True)
-    return path
+from ae_tirt.utils.paths import ensure_dir, get_safe_path
 
 
 class Sim_data_TIRT:
