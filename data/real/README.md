@@ -13,6 +13,7 @@ Empirical forced-choice data used in the AE-TIRT paper. Source: Japanese Big-Fiv
 | `pair_definitions.csv` | Pair definitions (25 pairs; statement IDs 1..50) for AE-TIRT. |
 | `weight_sign.csv` | Statement keying (+1/−1) for AE-TIRT. |
 | `Real_data.csv` | Long-format (person, itemC, response) for use with R Thurstonian IRT packages. |
+| `pretrained_model.pth` | Pre-trained AE-TIRT weights (paper-aligned results). |
 
 The AE-TIRT inputs (`item_trait_map.csv`, `X_responses.csv`, `pair_definitions.csv`, `weight_sign.csv`) were derived from `dat_2MFC.csv` and `items_2MFC.csv`. `Real_data.csv` is the long-format export for R.
 
@@ -33,6 +34,9 @@ python scripts/run_real_data_analysis.py --data-dir data/real --responses-file X
 
 # Fit AE-TIRT (long-format input)
 python scripts/run_real_data_analysis.py --data-dir data/real --use-long-format
+
+# Evaluate with pre-trained weights (paper-aligned results)
+python scripts/evaluate_pretrained_model.py --weights data/real/pretrained_model.pth
 ```
 
 Default hyperparameters in the script match the paper (e.g., Adam, batch size 16, 500 epochs). Use `--strict-real-data` to enforce 50 statements, 5 traits, 25 pairs.

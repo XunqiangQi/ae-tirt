@@ -169,6 +169,14 @@ python examples/05_paper_real_data_example.py
 
 Required inputs: binary response matrix (or long-format), `pair_definitions.csv`, `item_trait_map.csv`, `weight_sign.csv`. Response columns = number of pairs; pair indices 1..D; D = number of statements. See `data/real/README.md` for file provenance (OSF source), AE-TIRT-derived files, and R-format.
 
+**Evaluate with pre-trained weights** (paper-aligned results):
+
+```bash
+python scripts/evaluate_pretrained_model.py --weights data/real/pretrained_model.pth
+```
+
+This loads pre-trained model weights and reports key metrics (-2LL, AIC, BIC, ACC, AUC, F1, F2, parameter estimates) in the terminal, ensuring consistency with published results.
+
 Paper real data: 5 traits, 50 statements, 25 pairs. Run `python scripts/verify_real_data.py` to check; use `--strict-real-data` to enforce. Defaults in `run_real_data_analysis.py`:
 
 - `optimizer = adam`
