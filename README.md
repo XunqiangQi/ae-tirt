@@ -23,16 +23,14 @@ AE-TIRT is intended as a **computationally efficient complement** to SEM- and MC
 - **Compared with MCMC**: it trades posterior uncertainty quantification for substantial speed gains.
 - **Scope condition**: it is best suited to exploratory, operational, and large-scale scoring settings in which speed and stability are prioritized.
 
-### Optional Standard Errors (Post Hoc)
+### Standard Errors (Observed-Likelihood Based)
 
-Following the formulation in the paper, AE-TIRT is trained as a point-estimation framework and **does not compute standard errors by default**.  
-When inferential support is required, standard errors can be computed post hoc from the observed information matrix (the negative Hessian of the decoder log-likelihood):
+AE-TIRT provides standard errors via a **post hoc procedure based on the observed information** (the negative Hessian of the decoder log-likelihood). This yields asymptotic, approximate SEs conditional on encoder-based trait estimates. Two options are supported:
 
-- **Full Hessian**: more accurate, computationally expensive.
+- **Full Hessian**: more accurate, computationally more expensive.
 - **Diagonal approximation**: faster, approximate.
-- **Scale handling**: for standardized loadings (`w = sigmoid(u) * sign`), SEs are transformed to the loading scale via the chain rule.
 
-This procedure yields asymptotic, approximate SEs conditional on encoder-based trait estimates.
+For standardized loadings (`w = sigmoid(u) * sign`), SEs are transformed to the loading scale via the chain rule.
 
 ## Core Components
 
