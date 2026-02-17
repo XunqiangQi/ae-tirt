@@ -109,13 +109,13 @@ se = model.compute_standard_errors(
 )
 model.print_standard_errors_summary(se, num_examples=3)
 
-# Optional: academic-style report table (estimate, SE, z, p, CI)
+# report table with estimate, SE, z, p, CI
 se_tables = model.build_standard_error_report(se, alpha=0.05)
 print(se_tables["theta"].head(3))
 print(se_tables["w"].head(3))
 print(se_tables["b"].head(3))
 
-# Optional: export CSV reports for theta / w / b (no true-value columns)
+# export CSV reports for theta / w / b 
 paths = model.save_standard_errors(
     se_results=se,
     output_dir="se_reports",
