@@ -2,4 +2,5 @@ __pycache__/
 *.pyc
 .venv/.DS_Store
 *.pth
+!data/real/pretrained_model.pth
 *.pkl
