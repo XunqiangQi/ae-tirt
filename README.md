@@ -70,7 +70,7 @@ from ae_tirt import AE_TIRT, Sim_data_TIRT, train_model, evaluate_model
 sim = Sim_data_TIRT(
     npersons=300,
     ntraits=5,
-    nblocks_per_trait=6,
+    nblocks_per_trait=12,
     nitems_per_block=2,
     weight_sign=0.5,
     w_range=(0.65, 0.95),
