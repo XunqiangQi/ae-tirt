@@ -1,45 +1,45 @@
 # AE-TIRT: Autoencoder-Based Thurstonian IRT Toolkit
 
-`ae-tirt` is a research-oriented Python package for estimating **Thurstonian IRT (TIRT)** models for forced-choice (FC) assessments using an autoencoder-based estimation strategy.
+`ae-tirt` is a research-oriented Python package for estimating **Thurstonian IRT (TIRT)** models for forced-choice (FC) assessments via an autoencoder-based estimation strategy.
 
-The package operationalizes the methodological framework described in the manuscript:
+The package implements the methodological framework described in the manuscript:
 **An Autoencoder-Based Thurstonian IRT Model for Forced-Choice Assessment: Estimation Framework and Evaluation (2026)**.
 
-## Abstract-Style Overview
+## Overview
 
-Forced-choice measurement requires estimation methods that are both psychometrically interpretable and computationally scalable. AE-TIRT combines:
+Forced-choice measurement requires estimation procedures that are both psychometrically interpretable and computationally scalable. AE-TIRT integrates:
 
 - an amortized **encoder** for fast latent trait inference,
 - a theory-constrained **decoder** that implements the Thurstonian comparison equation,
-- end-to-end optimization for joint recovery of item parameters and person traits.
+- end-to-end optimization for the joint recovery of item parameters and person traits.
 
-Across simulation conditions (3 x 2 x 2 x 2 design, 50 replications per condition), AE-TIRT is designed to provide strong numerical stability and substantially reduced runtime relative to full MCMC workflows, while preserving parameter interpretability under the Thurstonian measurement model.
+Across simulation conditions (3 x 2 x 2 x 2 design, 50 replications per condition), AE-TIRT is designed to improve numerical stability and reduce runtime relative to full MCMC workflows, while preserving parameter interpretability under the Thurstonian measurement model.
 
 ## Methodological Positioning
 
-AE-TIRT is intended as a **computationally efficient complement** to SEM- and MCMC-based TIRT estimation.
+AE-TIRT is intended as a **computationally efficient complement** to SEM- and MCMC-based approaches to TIRT estimation.
 
-- **Compared with SEM**: avoids dependence on ill-conditioned weight-matrix inversion workflows in fragile settings.
-- **Compared with MCMC**: trades posterior uncertainty quantification for substantial speed gains.
-- **Scope condition**: best suited to exploratory, operational, and large-scale scoring settings where speed and stability are prioritized.
+- **Compared with SEM**: it avoids reliance on ill-conditioned weight-matrix inversion workflows in fragile settings.
+- **Compared with MCMC**: it trades posterior uncertainty quantification for substantial speed gains.
+- **Scope condition**: it is best suited to exploratory, operational, and large-scale scoring settings in which speed and stability are prioritized.
 
 ### Optional Standard Errors (Post Hoc)
 
-Following the paper's formulation, AE-TIRT is trained as a point-estimation framework and **does not compute standard errors by default**.  
-When inferential support is needed, standard errors can be computed post hoc from the observed information matrix (negative Hessian of decoder log-likelihood):
+Following the formulation in the paper, AE-TIRT is trained as a point-estimation framework and **does not compute standard errors by default**.  
+When inferential support is required, standard errors can be computed post hoc from the observed information matrix (the negative Hessian of the decoder log-likelihood):
 
 - **Full Hessian**: more accurate, computationally expensive.
 - **Diagonal approximation**: faster, approximate.
 - **Scale handling**: for standardized loadings (`w = sigmoid(u) * sign`), SEs are transformed to the loading scale via the chain rule.
 
-This provides asymptotic, approximate SEs conditional on encoder-based trait estimates.
+This procedure yields asymptotic, approximate SEs conditional on encoder-based trait estimates.
 
 ## Core Components
 
 - `ae_tirt/models`: AE-TIRT architecture and decoder-constrained model logic.
-- `ae_tirt/data`: simulation, loaders, preprocessing, and transforms.
+- `ae_tirt/data`: simulation, data loaders, preprocessing, and transforms.
 - `ae_tirt/training`: training loop, optimizer utilities, and callbacks.
-- `ae_tirt/evaluation`: trait/item recovery metrics and validators.
+- `ae_tirt/evaluation`: trait and item recovery metrics and validators.
 - `ae_tirt/experiments`: factorial condition generators and batch runners.
 - `ae_tirt/config`: typed defaults and validation schema.
 
@@ -61,7 +61,7 @@ For documentation:
 pip install -r requirements-docs.txt
 ```
 
-## Minimal Reproducible Usage
+## Minimal Reproducible Example
 
 ```python
 import torch
@@ -125,11 +125,11 @@ paths = model.save_standard_errors(
 print(paths)
 ```
 
-## Standard Usage Scenarios
+## Typical Usage Scenarios
 
-### Scenario A: Simulate Data Then Analyze
+### Scenario A: Simulate Data and Analyze
 
-Use this path when conducting methodological studies (parameter recovery, stability, runtime).
+Use this workflow when conducting methodological studies (parameter recovery, stability, runtime).
 
 ```bash
 python examples/01_basic_usage.py
@@ -144,13 +144,13 @@ python scripts/run_all_experiments.py
 
 ### Scenario B: Analyze Externally Provided Data
 
-Use this path when another team provides FC response files and design metadata.
+Use this workflow when FC response files and design metadata are provided by an external team.
 
 ```bash
 python scripts/run_real_data_analysis.py --data-dir data/real
 ```
 
-Paper dataset example in this workspace:
+Dataset example aligned with the paper in this workspace:
 
 ```bash
 python scripts/run_real_data_analysis.py \
@@ -163,7 +163,7 @@ python scripts/run_real_data_analysis.py \
   --penalty-weight-factor 1.0
 ```
 
-or run the packaged example:
+Alternatively, run the packaged example:
 
 ```bash
 python examples/05_paper_real_data_example.py
@@ -178,9 +178,9 @@ Required files in `data/real`:
 
 Consistency constraints checked by the script:
 
-- number of response columns must equal rows in `pair_definitions.csv`,
-- max item index in pair definitions must be within `1..D`,
-- length of `weight_sign.csv` must equal length of `item_trait_map.csv`,
+- the number of response columns must equal the number of rows in `pair_definitions.csv`,
+- the maximum item index in the pair definitions must be within `1..D`,
+- the length of `weight_sign.csv` must equal the length of `item_trait_map.csv`,
 - responses must be strictly binary (`0/1`).
 
 Supported alternative (R-compatible) schemas:
