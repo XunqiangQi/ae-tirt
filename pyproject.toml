@@ -30,3 +30,7 @@ docs = ["sphinx"]
 
 [project.scripts]
 ae-tirt-run-all = "ae_tirt.cli:run_all_experiments"
+
+[tool.setuptools.packages.find]
+include = ["ae_tirt*"]
+exclude = ["data*"]
