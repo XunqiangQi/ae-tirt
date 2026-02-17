@@ -23,6 +23,17 @@ AE-TIRT is intended as a **computationally efficient complement** to SEM- and MC
 - **Compared with MCMC**: trades posterior uncertainty quantification for substantial speed gains.
 - **Scope condition**: best suited to exploratory, operational, and large-scale scoring settings where speed and stability are prioritized.
 
+### Optional Standard Errors (Post Hoc)
+
+Following the paper's formulation, AE-TIRT is trained as a point-estimation framework and **does not compute standard errors by default**.  
+When inferential support is needed, standard errors can be computed post hoc from the observed information matrix (negative Hessian of decoder log-likelihood):
+
+- **Full Hessian**: more accurate, computationally expensive.
+- **Diagonal approximation**: faster, approximate.
+- **Scale handling**: for standardized loadings (`w = sigmoid(u) * sign`), SEs are transformed to the loading scale via the chain rule.
+
+This provides asymptotic, approximate SEs conditional on encoder-based trait estimates.
+
 ## Core Components
 
 - `ae_tirt/models`: AE-TIRT architecture and decoder-constrained model logic.
@@ -88,6 +99,30 @@ history = train_model(
 
 metrics = evaluate_model(model, sim.responses, sim.theta)
 print(metrics["traits"]["overall"])
+
+# Optional: post-hoc standard errors (not computed during training)
+se = model.compute_standard_errors(
+    torch.tensor(sim.responses, dtype=torch.float32),
+    method="observed",
+    use_hessian_diag=True,  # set False for full Hessian
+    regularization=1e-4,
+)
+model.print_standard_errors_summary(se, num_examples=3)
+
+# Optional: academic-style report table (estimate, SE, z, p, CI)
+se_tables = model.build_standard_error_report(se, alpha=0.05)
+print(se_tables["theta"].head(3))
+print(se_tables["w"].head(3))
+print(se_tables["b"].head(3))
+
+# Optional: export CSV reports for theta / w / b (no true-value columns)
+paths = model.save_standard_errors(
+    se_results=se,
+    output_dir="se_reports",
+    repeat=1,
+    alpha=0.05,
+)
+print(paths)
 ```
 
 ## Standard Usage Scenarios
