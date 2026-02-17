@@ -100,11 +100,11 @@ history = train_model(
 metrics = evaluate_model(model, sim.responses, sim.theta)
 print(metrics["traits"]["overall"])
 
-# Optional: post-hoc standard errors (not computed during training)
+# Compute standard errors 
 se = model.compute_standard_errors(
     torch.tensor(sim.responses, dtype=torch.float32),
     method="observed",
-    use_hessian_diag=True,  # set False for full Hessian
+    use_hessian_diag=True,  # set False for full Hessian 
     regularization=1e-4,
 )
 model.print_standard_errors_summary(se, num_examples=3)
