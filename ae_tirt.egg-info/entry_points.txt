@@ -1,0 +1,2 @@
+[console_scripts]
+ae-tirt-run-all = ae_tirt.cli:run_all_experiments

@@ -9,11 +9,28 @@ from ae_tirt import AE_TIRT, train_model
 
 
 def main():
-    # Replace with your own file paths.
-    responses = pd.read_csv("data/real/responses.csv").values
-    item_trait_map = pd.read_csv("data/real/item_trait_map.csv")["item_trait"].values
-    pair_definitions = pd.read_csv("data/real/pair_definitions.csv")[["item1", "item2"]].values
-    weight_sign = pd.read_csv("data/real/weight_sign.csv")["weight_sign"].values
+    # Load bundled real data (see data/real/README.md for file provenance).
+    resp_df = pd.read_csv("data/real/X_responses.csv")
+    if "userid" in resp_df.columns:
+        resp_df = resp_df.drop(columns=["userid"])
+    responses = resp_df.values
+
+    itm = pd.read_csv("data/real/item_trait_map.csv")
+    if "trait_id" in itm.columns:
+        itm = itm.sort_values("statement_id")
+        item_trait_map = itm["trait_id"].values
+    else:
+        item_trait_map = itm["item_trait"].values
+
+    pair_df = pd.read_csv("data/real/pair_definitions.csv")
+    if "statement_j" in pair_df.columns:
+        pair_df = pair_df.rename(columns={"statement_j": "item1", "statement_k": "item2"})
+    pair_definitions = pair_df[["item1", "item2"]].values
+
+    sign_df = pd.read_csv("data/real/weight_sign.csv")
+    if "statement_id" in sign_df.columns:
+        sign_df = sign_df.sort_values("statement_id")
+    weight_sign = sign_df["weight_sign"].values
 
     model = AE_TIRT(
         input_dim=responses.shape[1],

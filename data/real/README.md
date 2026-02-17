@@ -1,52 +1,42 @@
-# Paper Real Data (Included)
+# Real Data
 
-This directory directly includes the empirical data files used in the AE-TIRT paper workflow.
+Empirical forced-choice data used in the AE-TIRT paper. Source: Japanese Big-Five Scale short form (Namikawa et al., 2012); repository: https://osf.io/xzcrs/
 
-## Included Files
+## File provenance
 
-- `X_responses.csv`: wide binary response matrix (`userid` + pair columns).
-- `Real_data.csv`: long-format response table compatible with R thurstonian-style pipelines.
-- `item_trait_map.csv`: statement-to-trait mapping (`statement_id,trait_id`).
-- `pair_definitions.csv`: pair definitions (`statement_j,statement_k`).
-- `weight_sign.csv`: fixed sign constraints (`statement_id,weight_sign`).
-- `items_2MFC.csv`: item/block metadata used during preprocessing.
+| File | Description |
+|------|-------------|
+| `dat_2MFC.csv` | Raw response data from OSF (participant × block responses). |
+| `items_2MFC.csv` | Block design from OSF: M1/M2 = traits of the two statements per block, R1/R2 = keying. |
+| `item_trait_map.csv` | Statement–trait mapping in AE-TIRT format (50 statements, trait_id 1..5). |
+| `X_responses.csv` | Binary response matrix (persons × 25 pairs) for AE-TIRT. |
+| `pair_definitions.csv` | Pair definitions (25 pairs; statement IDs 1..50) for AE-TIRT. |
+| `weight_sign.csv` | Statement keying (+1/−1) for AE-TIRT. |
+| `Real_data.csv` | Long-format (person, itemC, response) for use with R Thurstonian IRT packages. |
 
-## Data Source
+The AE-TIRT inputs (`item_trait_map.csv`, `X_responses.csv`, `pair_definitions.csv`, `weight_sign.csv`) were derived from `dat_2MFC.csv` and `items_2MFC.csv`. `Real_data.csv` is the long-format export for R.
 
-The empirical FC dataset is adapted from the Japanese Big-Five Scale short form study:
+## Design
 
-- Namikawa et al. (2012)
-- OSF repository referenced in manuscript: `https://osf.io/xzcrs/`
-
-The files in this folder are project-ready derivatives used by the AE-TIRT analysis scripts.
+5 traits, 50 statements, 25 blocks (one pair per block). Trait IDs are consecutive 1..5.
 
 ## Usage
 
-Run the real-data analysis directly:
+Install the project first (`pip install -e .` from the repo root). Then:
 
 ```bash
+# Verify 5 traits, 50 statements, 25 pairs and consistency with items_2MFC
+python scripts/verify_real_data.py
+
+# Fit AE-TIRT (matrix input)
 python scripts/run_real_data_analysis.py --data-dir data/real --responses-file X_responses.csv
-```
 
-Paper-aligned hyperparameters are set as defaults in the script:
-
-- optimizer: `adam`
-- batch size: `16`
-- epochs: `500`
-- learning rate: `0.001`
-- early stopping patience: `20`
-- penalty weight factor: `1.0`
-- seed: `42`
-- weight constraint: `standardized`
-- link function: `probit`
-
-Or use long-format input:
-
-```bash
+# Fit AE-TIRT (long-format input)
 python scripts/run_real_data_analysis.py --data-dir data/real --use-long-format
 ```
 
-## Notes
+Default hyperparameters in the script match the paper (e.g., Adam, batch size 16, 500 epochs). Use `--strict-real-data` to enforce 50 statements, 5 traits, 25 pairs.
 
-- Keep participant-level identifiers anonymized.
-- Check redistribution permissions and citation requirements before external release.
+## Citation
+
+Cite the original data source (Namikawa et al., 2012) and the OSF repository when using or redistributing these files.

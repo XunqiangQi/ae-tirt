@@ -1,9 +1,4 @@
-"""Standardized AE-TIRT fitting script for externally provided FC data.
-
-Supports two response input styles:
-1) matrix format: X_responses.csv (rows=persons, cols=pairs),
-2) long format:   Real_data.csv (person, itemC, response ...), compatible with R workflows.
-"""
+"""Fit AE-TIRT on external FC data. Input: matrix (persons × pairs) or long-format (person, itemC, response). See data/real/README.md for file formats."""
 
 from __future__ import annotations
 
@@ -52,6 +47,26 @@ def _validate_inputs(responses_df, item_trait_df, pair_df, sign_df):
         raise ValueError(
             f"pair_definitions.csv contains item indices out of range. Valid item IDs are 1..{nitems}."
         )
+
+
+def _validate_real_data_shape(item_trait_map: np.ndarray, npairs: int, expect_50_5: bool = False) -> None:
+    """Check trait IDs are 1..K; if expect_50_5, require 50 statements, 5 traits, 25 pairs."""
+    nitems = len(item_trait_map)
+    unique_traits = set(np.unique(item_trait_map).tolist())
+    ntraits = int(np.max(item_trait_map))
+    if unique_traits != set(range(1, ntraits + 1)):
+        raise ValueError(
+            f"item_trait_map trait IDs must be consecutive 1..K (got {sorted(unique_traits)})."
+        )
+    if expect_50_5:
+        if nitems != 50 or ntraits != 5:
+            raise ValueError(
+                f"Strict real-data mode requires 50 statements and 5 traits; got nitems={nitems}, ntraits={ntraits}."
+            )
+        if npairs != 25:
+            raise ValueError(
+                f"Strict real-data mode requires 25 pairs (50 statements); got {npairs}."
+            )
 
 
 def _read_item_trait_map(path: Path) -> np.ndarray:
@@ -130,6 +145,11 @@ def main():
     parser.add_argument("--device", type=str, default="cuda" if torch.cuda.is_available() else "cpu")
     parser.add_argument("--weight-constraint", type=str, default="standardized", choices=["standardized", "free"])
     parser.add_argument("--link-function", type=str, default="probit", choices=["probit", "logit"])
+    parser.add_argument(
+        "--strict-real-data",
+        action="store_true",
+        help="Enforce paper convention: 50 statements, 5 traits, 25 pairs.",
+    )
     args = parser.parse_args()
 
     torch.manual_seed(args.seed)
@@ -153,6 +173,12 @@ def main():
         pd.DataFrame({"item_trait": item_trait_map}),
         pair_df,
         pd.DataFrame({"weight_sign": weight_sign}),
+    )
+
+    _validate_real_data_shape(
+        item_trait_map,
+        npairs=responses_df.values.shape[1],
+        expect_50_5=args.strict_real_data,
     )
 
     responses = responses_df.values

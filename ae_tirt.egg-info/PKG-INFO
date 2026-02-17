@@ -1,3 +1,27 @@
+Metadata-Version: 2.4
+Name: ae-tirt
+Version: 0.1.0
+Summary: Research-oriented toolkit for Autoencoder Thurstonian IRT modeling
+Keywords: psychometrics,irt,thurstonian,forced-choice,autoencoder
+Classifier: Development Status :: 3 - Alpha
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3 :: Only
+Classifier: Topic :: Scientific/Engineering
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: numpy
+Requires-Dist: pandas
+Requires-Dist: scipy
+Requires-Dist: torch
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Provides-Extra: docs
+Requires-Dist: sphinx; extra == "docs"
+Dynamic: license-file
+
 # AE-TIRT: Autoencoder-Based Thurstonian IRT Toolkit
 
 `ae-tirt` is a research-oriented Python package for estimating **Thurstonian IRT (TIRT)** models for forced-choice (FC) assessments via an autoencoder-based estimation strategy.
