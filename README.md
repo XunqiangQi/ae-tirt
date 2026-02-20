@@ -11,21 +11,13 @@ Forced-choice measurement requires estimation procedures that are both psychomet
 
 - an amortized **encoder** for fast latent trait inference,
 - a theory-constrained **decoder** that implements the Thurstonian comparison equation,
-- end-to-end optimization for the joint recovery of item parameters and person traits.
+- end-to-end optimization for the joint estimation of item parameters and person traits.
 
-Across simulation conditions (3 x 2 x 2 x 2 design, 50 replications per condition), AE-TIRT is designed to improve numerical stability and reduce runtime relative to full MCMC workflows, while preserving parameter interpretability under the Thurstonian measurement model.
+Across simulation conditions (3 x 2 x 2 x 2 design, 50 replications per condition), AE-TIRT targets numerically stable and scalable estimation while preserving parameter interpretability under the Thurstonian measurement model.
 
-## Methodological Positioning
+## Standard Errors (Observed-Information, Decoder Likelihood)
 
-AE-TIRT is intended as a **computationally efficient complement** to SEM- and MCMC-based approaches to TIRT estimation.
-
-- **Compared with SEM**: it avoids reliance on ill-conditioned weight-matrix inversion workflows in fragile settings.
-- **Compared with MCMC**: it trades posterior uncertainty quantification for substantial speed gains.
-- **Scope condition**: it is best suited to exploratory, operational, and large-scale scoring settings in which speed and stability are prioritized.
-
-### Standard Errors (Observed-Likelihood Based)
-
-AE-TIRT provides standard errors via a **post hoc procedure based on the observed information** (the negative Hessian of the decoder log-likelihood). This yields asymptotic, approximate SEs conditional on encoder-based trait estimates. Two options are supported:
+AE-TIRT includes an optional, post hoc standard error routine based on the **observed information** (negative Hessian) of the decoder log-likelihood. This yields asymptotic, approximate SEs **conditional on encoder-based trait estimates**. Two options are supported:
 
 - **Full Hessian**: more accurate, computationally more expensive.
 - **Diagonal approximation**: faster, approximate.
@@ -158,7 +150,7 @@ python scripts/run_real_data_analysis.py \
   --num-epochs 500 \
   --learning-rate 0.001 \
   --early-stopping-patience 20 \
-  --penalty-weight-factor 1.0
+  --penalty-weight-factor batch_size * 1.0\
 ```
 
 Alternatively, run the packaged example:
