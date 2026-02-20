@@ -196,7 +196,7 @@ This script fixes:
 - `batch_size = 16`
 - `learning_rate = 0.001`
 - `early_stopping_patience = 20`
-- `penalty_weight_factor = 1`
+- `penalty_weight_factor = batch_size * 1.0`
 - `seed = 42`
 
 ## Project Documentation
