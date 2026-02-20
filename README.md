@@ -176,7 +176,7 @@ Paper real data: 5 traits, 50 statements, 25 pairs. Run `python scripts/verify_r
 - `num_epochs = 500`
 - `learning_rate = 0.001`
 - `early_stopping_patience = 20`
-- `penalty_weight_factor = 1.0`
+- `penalty_weight_factor = batch_size * 1.0`
 - `seed = 42`
 - `weight_constraint = standardized`
 - `link_function = probit`
