@@ -36,7 +36,7 @@ python scripts/run_real_data_analysis.py --data-dir data/real --responses-file X
 python scripts/run_real_data_analysis.py --data-dir data/real --use-long-format
 
 # Evaluate with pre-trained weights (paper-aligned results)
-python scripts/evaluate_pretrained_model.py --weights data/real/pretrained_model.pth
+python scripts/run_real_data_analysis.py --weights data/real/pretrained_model.pth
 ```
 
 Default hyperparameters in the script match the paper (e.g., Adam, batch size 16, 500 epochs). Use `--strict-real-data` to enforce 50 statements, 5 traits, 25 pairs.
