@@ -24,12 +24,23 @@ def run_experiments(conditions, run_fn):
     return results
 
 
+def _resolve_batch_size(nitems_per_block: int, batch_size: Optional[int]) -> int:
+    """Resolve batch size from block size unless manually overridden."""
+    if batch_size is not None:
+        return int(batch_size)
+    if nitems_per_block == 3:
+        return 32
+    if nitems_per_block == 2:
+        return 16
+    return 16
+
+
 def batch_simulate_and_train(
     conditions_list,
     repeat=1,
     sim_data_root="Sim_data_result",
     num_epochs=500,
-    batch_size=16,
+    batch_size=None,
     learning_rate=0.001,
     early_stopping_patience=20,
     penalty_weight_factor=0.1,
@@ -103,11 +114,12 @@ def batch_simulate_and_train(
 
             device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
             train_start_time = time.time()
+            resolved_batch_size = _resolve_batch_size(cond["nitems_per_block"], batch_size)
             train_model(
                 model=model,
                 train_data=Y,
                 optimizer_name="adam",
-                batch_size=batch_size,
+                batch_size=resolved_batch_size,
                 num_epochs=num_epochs,
                 learning_rate=learning_rate,
                 device=device,

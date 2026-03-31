@@ -21,11 +21,13 @@ COMPUTE_SE = False # Set to True to compute SEs
 
 
 def main():
+    nitems_per_block = 3
+    batch_size = 32 if nitems_per_block == 3 else 16
     sim = Sim_data_TIRT(
         npersons=500,
         ntraits=5,
         nblocks_per_trait=12,
-        nitems_per_block=3,
+        nitems_per_block=nitems_per_block,
         weight_sign=0.5,
         w_range=(0.65, 0.95),
         b_range=(-1.0, 1.0),
@@ -47,7 +49,7 @@ def main():
         model=model,
         train_data=sim.responses,
         optimizer_name="adam",
-        batch_size=32,
+        batch_size=batch_size,
         num_epochs=500,
         learning_rate=1e-3,
         device=device,

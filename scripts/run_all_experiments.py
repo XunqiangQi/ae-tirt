@@ -39,7 +39,6 @@ def main():
         repeat=50,
         sim_data_root="Sim_data_result",
         num_epochs=500,
-        batch_size=16,
         learning_rate=0.001,
         early_stopping_patience=20,
         penalty_weight_factor=1,

@@ -15,7 +15,6 @@ def main():
         repeat=2,
         sim_data_root="example_outputs/study1_small",
         num_epochs=500,
-        batch_size=16,
         learning_rate=1e-3,
         early_stopping_patience=20,
         penalty_weight_factor=1.0,
