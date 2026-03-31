@@ -58,8 +58,8 @@ import torch
 from ae_tirt import AE_TIRT, Sim_data_TIRT, train_model, evaluate_model
 
 sim = Sim_data_TIRT(
-    npersons=300, ntraits=5, nblocks_per_trait=12, nitems_per_block=2,
-    weight_sign=0.5, w_range=(0.65, 0.95), b_range=(-1.0, 1.0),
+    npersons=300, ntraits=5, nblocks_per_trait=12, nitems_per_block=3,
+    weight_sign=1, w_range=(0.65, 0.95), b_range=(-1.0, 1.0),
 ).simulate()
 
 model = AE_TIRT(
