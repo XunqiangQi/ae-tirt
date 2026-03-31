@@ -37,7 +37,7 @@ def main():
         train_data=sim.responses,
         optimizer_name="adam",
         batch_size=16,
-        num_epochs=100,
+        num_epochs=500,
         learning_rate=0.001,
         early_stopping_patience=20,
         penalty_weight=sim.responses.shape[1] * 1.0,
