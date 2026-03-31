@@ -17,7 +17,7 @@ from ae_tirt import AE_TIRT, Sim_data_TIRT, evaluate_model, train_model
 # are obtained via the chain rule (delta method).
 # Enable COMPUTE_SE only when SE / CI / Wald-z values are needed for reporting.
 # ---------------------------------------------------------------------------
-COMPUTE_SE = True
+COMPUTE_SE = False # Set to True to compute SEs
 
 
 def main():
