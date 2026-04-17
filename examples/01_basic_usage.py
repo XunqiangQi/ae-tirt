@@ -22,7 +22,7 @@ COMPUTE_SE = False # Set to True to compute SEs
 
 def main():
     nitems_per_block = 3
-    batch_size = 32 if nitems_per_block == 3 else 16
+    batch_size = 32 
     sim = Sim_data_TIRT(
         npersons=500,
         ntraits=5,
